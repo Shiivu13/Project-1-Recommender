@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 import joblib
 import pandas as pd
@@ -9,6 +10,10 @@ movies = pd.read_pickle("movies.pkl")
 neighbors = joblib.load("neighbors.pkl")
 
 app = FastAPI(title="Movie Recommender API", version="2.0")
+
+@app.get("/", include_in_schema=False)
+def root():
+    return RedirectResponse(url="/docs")
 
 class RecommendResponse(BaseModel):
     query: str
